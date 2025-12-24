@@ -229,11 +229,18 @@ class DocumentFormat(str, Enum):
     V1 = "v1"
 
 
+def _get_version(pkg: str) -> str:
+    try:
+        return importlib.metadata.version(pkg)
+    except importlib.metadata.PackageNotFoundError:
+        return "not-installed"
+
+
 class DoclingVersion(BaseModel):
-    docling_version: str = importlib.metadata.version("docling")
-    docling_core_version: str = importlib.metadata.version("docling-core")
-    docling_ibm_models_version: str = importlib.metadata.version("docling-ibm-models")
-    docling_parse_version: str = importlib.metadata.version("docling-parse")
+    docling_version: str = _get_version("docling")
+    docling_core_version: str = _get_version("docling-core")
+    docling_ibm_models_version: str = _get_version("docling-ibm-models")
+    docling_parse_version: str = _get_version("docling-parse")
     platform_str: str = platform.platform()
     py_impl_version: str = sys.implementation.cache_tag
     py_lang_version: str = platform.python_version()
